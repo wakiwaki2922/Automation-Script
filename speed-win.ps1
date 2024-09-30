@@ -1,18 +1,19 @@
-# Tao thu muc tam thoi va tai Speedtest CLI
+# Create temp directory and download Speedtest CLI
 $tempDir = Join-Path $env:TEMP "SpeedtestCLI"
 New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
 $speedtestPath = Join-Path $tempDir "speedtest.exe"
 Invoke-WebRequest -Uri "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-win64.zip" -OutFile "$tempDir\speedtest.zip"
 Expand-Archive -Path "$tempDir\speedtest.zip" -DestinationPath $tempDir -Force
 
-# Chay speed test
-Write-Host "Dang chay speed test..."
+# Run speed test
+Write-Host "Running speed test..."
 $speedtestOutput = & $speedtestPath --format=json --progress=no --accept-license --accept-gdpr
 
-# Xu ly va hien thi ket qua
+# Process and display results
 try {
     $result = $speedtestOutput | ConvertFrom-Json
     
+    # Convert speed to human-readable format
     function ConvertToHumanReadable($speedInMbps) {
         if ($speedInMbps -ge 1000) {
             return "$([math]::Round($speedInMbps / 1000, 2)) Gbps"
@@ -22,22 +23,24 @@ try {
     }
     $downloadSpeed = ConvertToHumanReadable($result.download.bandwidth / 125000)
     $uploadSpeed = ConvertToHumanReadable($result.upload.bandwidth / 125000)
-    Write-Host "`nKet qua Speed Test:"
+
+    # Output results
+    Write-Host "`nSpeed Test Results:"
     Write-Host "Download: $downloadSpeed"
     Write-Host "Upload: $uploadSpeed"
     Write-Host "Ping: $($result.ping.latency) ms"
-    Write-Host "Nha mang: $($result.isp)"
+    Write-Host "ISP: $($result.isp)"
 } catch {
-    Write-Host "Khong the doc ket qua speed test. Loi: $_"
+    Write-Host "Failed to read speed test results. Error: $_"
 }
 
-# Xoa thu muc tam
+# Delete temp directory
 Remove-Item $tempDir -Recurse -Force -ErrorAction SilentlyContinue
 
-# Dọn dẹp bất kỳ file nào liên quan đến Speedtest trong thư mục %TEMP%
+# Clean up any speedtest-related files in %TEMP%
 Get-ChildItem $env:TEMP -Recurse | Where-Object { $_.Name -like "*speedtest*" } | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
 
-# Thông báo hoàn thành
-Write-Host "`nDa hoan thanh va don dep."
+# Notify completion
+Write-Host "`nCompleted and cleaned up."
 
-# Lưu ý: Phần tự xóa script được bỏ qua khi sử dụng irm | iex
+# Note: Self-deletion of script skipped when using irm | iex
