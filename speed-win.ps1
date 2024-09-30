@@ -2,7 +2,6 @@
 $tempDir = Join-Path $env:TEMP "SpeedtestCLI"
 New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
 $speedtestPath = Join-Path $tempDir "speedtest.exe"
-
 Invoke-WebRequest -Uri "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-win64.zip" -OutFile "$tempDir\speedtest.zip"
 Expand-Archive -Path "$tempDir\speedtest.zip" -DestinationPath $tempDir -Force
 
@@ -21,10 +20,8 @@ try {
             return "$([math]::Round($speedInMbps, 2)) Mbps"
         }
     }
-
     $downloadSpeed = ConvertToHumanReadable($result.download.bandwidth / 125000)
     $uploadSpeed = ConvertToHumanReadable($result.upload.bandwidth / 125000)
-
     Write-Host "`nKet qua Speed Test:"
     Write-Host "Download: $downloadSpeed"
     Write-Host "Upload: $uploadSpeed"
@@ -37,7 +34,10 @@ try {
 # Xoa thu muc tam
 Remove-Item $tempDir -Recurse -Force -ErrorAction SilentlyContinue
 
-# Tu xoa script PowerShell hien tai
-$scriptPath = $MyInvocation.MyCommand.Path
-Start-Sleep -Seconds 2  # Cho mot khoang thoi gian ngan truoc khi xoa
-Remove-Item -Path $scriptPath -Force -ErrorAction SilentlyContinue
+# Dọn dẹp bất kỳ file nào liên quan đến Speedtest trong thư mục %TEMP%
+Get-ChildItem $env:TEMP -Recurse | Where-Object { $_.Name -like "*speedtest*" } | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+
+# Thông báo hoàn thành
+Write-Host "`nDa hoan thanh va don dep."
+
+# Lưu ý: Phần tự xóa script được bỏ qua khi sử dụng irm | iex
