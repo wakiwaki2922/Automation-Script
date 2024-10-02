@@ -35,6 +35,24 @@ irm https://raw.githubusercontent.com/wakiwaki2922/Automation-Script/main/sysinf
 - Uses color-coded output for better readability
 - Includes progress bars for memory and disk usage
 
+### 3. Docker and Portainer Installation Script (docker&port-linux.sh)
+
+**Description:** Automates the installation of Docker and Portainer on Linux systems, specifically tailored for Ubuntu.
+
+**Usage:**
+```bash
+curl -sSL https://raw.githubusercontent.com/wakiwaki2922/Automation-Script/main/docker%26port-linux.sh | sudo bash
+```
+
+**Key Features:**
+- Checks for root privileges
+- Adds Docker GPG key and repository
+- Installs Docker and its dependencies
+- Creates a Docker volume for Portainer
+- Installs and runs Portainer
+- Includes error handling and progress messages
+- Adds delays between commands for stability
+
 ## Contributing
 
 To contribute new scripts or improve existing ones, please create a pull request with details of your changes.
@@ -44,6 +62,7 @@ To contribute new scripts or improve existing ones, please create a pull request
 - Understand the script content before running.
 - Some scripts may require admin rights.
 - Keep scripts updated for the latest and safest versions.
+- The Docker and Portainer installation script is designed for Ubuntu. Modifications may be needed for other Linux distributions.
 
 ## Contact
 
