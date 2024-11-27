@@ -53,6 +53,23 @@ curl -sSL https://raw.githubusercontent.com/wakiwaki2922/Automation-Script/main/
 - Includes error handling and progress messages
 - Adds delays between commands for stability
 
+### 4. Refresh Icons Script (refresh_icons.bat)
+
+**Description:** Refreshes the Windows icon cache by killing the explorer process and deleting the icon cache files. This can resolve issues with corrupted or outdated icons.
+
+**Usage:**
+```batch
+Right-click refresh_icons.bat and select "Run as administrator".
+```
+
+**Key Features:**
+- Requires administrator privileges.
+- Kills the `explorer.exe` process.
+- Deletes `IconCache.db` and `iconcache*` files.
+- Restarts the computer to apply changes.
+- Includes error handling for administrator privileges check.
+
+
 ## Contributing
 
 To contribute new scripts or improve existing ones, please create a pull request with details of your changes.
@@ -60,9 +77,11 @@ To contribute new scripts or improve existing ones, please create a pull request
 ## Notes
 
 - Understand the script content before running.
-- Some scripts may require admin rights.
+- Some scripts require admin rights (e.g., `refresh_icons.bat`).
 - Keep scripts updated for the latest and safest versions.
 - The Docker and Portainer installation script is designed for Ubuntu. Modifications may be needed for other Linux distributions.
+- **Save all your work before running `refresh_icons.bat` as it restarts the explorer process.**
+
 
 ## Contact
 
